@@ -1,0 +1,31 @@
+version: '3.3'
+
+services:
+  db:
+    container_name: db
+    image: postgres:12.5-alpine
+    restart: unless-stopped
+    env_file:
+      - ./db/database.env
+    volumes:
+      - ./db/postgresql:/var/lib/postgresql/data
+  web:
+    container_name: web
+    image: django_blog:v1
+    restart: unless-stopped
+    command: sh -c "python3 app/manage.py runserver 0.0.0.0:8000"
+
+  nginx:
+    container_name: nginx
+    image: nginx:1.19.5-alpine
+    restart: unless-stopped
+    ports:
+      - 127.0.0.1:8000:8000
+    volumes:
+      - ./django_blog/config/nginx/django.conf:/etc/nginx/conf.d/django.conf
+      - ./nginx/log:/var/log/nginx
+
+networks:
+  default:
+    external:
+      name: app
