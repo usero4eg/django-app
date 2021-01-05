@@ -20,7 +20,7 @@ services:
     image: nginx:1.19.5-alpine
     restart: unless-stopped
     ports:
-      - 127.0.0.1:8000:8000
+      - 8000:8000
     volumes:
       - ./django_blog/config/nginx/django.conf:/etc/nginx/conf.d/django.conf
       - ./nginx/log:/var/log/nginx
